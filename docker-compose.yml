@@ -1,4 +1,3 @@
-
 version: '3.8'
 
 services:
@@ -13,7 +12,7 @@ services:
     env_file:
       - ./.env.production
     networks:
-      - traefik_network
+      - Foco
     deploy:
       replicas: 1
       placement:
@@ -21,8 +20,6 @@ services:
       labels:
         # --- Configuração do Traefik para o Backend ---
         - "traefik.enable=true"
-        - "traefik.docker.network=Foco"
-        # Roteador para a API na URL api.recrutamentoia.com.br
         - "traefik.http.routers.backend-router.rule=Host(`api.recrutamentoia.com.br`)"
         - "traefik.http.routers.backend-router.entrypoints=websecure"
         - "traefik.http.routers.backend-router.tls.certresolver=letsencryptresolver"
@@ -41,7 +38,7 @@ services:
         # Passa a URL da API como argumento de build para o Vite
         VITE_API_BASE_URL: https://api.recrutamentoia.com.br
     networks:
-      - traefik_network
+      - Foco
     deploy:
       replicas: 1
       placement:
@@ -49,8 +46,6 @@ services:
       labels:
         # --- Configuração do Traefik para o Frontend ---
         - "traefik.enable=true"
-        - "traefik.docker.network=Foco"
-        # Roteador para o Frontend na URL recrutamentoia.com.br (com e sem www)
         - "traefik.http.routers.frontend-router.rule=Host(`recrutamentoia.com.br`) || Host(`www.recrutamentoia.com.br`)"
         - "traefik.http.routers.frontend-router.entrypoints=websecure"
         - "traefik.http.routers.frontend-router.tls.certresolver=letsencryptresolver"
@@ -59,6 +54,5 @@ services:
 
 # --- Definição da Rede Externa do Traefik ---
 networks:
-  traefik_network:
+  Foco:
     external: true
-    name: Foco
