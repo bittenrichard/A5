@@ -18,5 +18,5 @@ COPY . .
 EXPOSE 3001
 
 # Comando para iniciar a aplicação através do npm, que resolve o "cross-env"
-# É necessário que no seu package.json tenha um script chamado "start"
+# É necessário que no seu package.json tenha um script chamado "start:prod"
 CMD ["npm", "run", "start:prod"]
