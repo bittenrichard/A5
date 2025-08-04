@@ -4,13 +4,11 @@ FROM node:18 AS build
 # Defina o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copie o package.json e o package-lock.json
-COPY package*.json ./
+# Copie o .npmrc, package.json e o package-lock.json
+COPY .npmrc package*.json ./
 
-# Instale as dependências. Em seguida, instale a dependência nativa do rollup de forma explícita.
+# Instale todas as dependências
 RUN npm install
-RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
-RUN npm rebuild
 
 # Copie o restante do código do frontend
 COPY . .
