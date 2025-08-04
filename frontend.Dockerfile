@@ -7,9 +7,9 @@ WORKDIR /app
 # Copie o package.json e o package-lock.json
 COPY package*.json ./
 
-# Instale as dependências (incluindo devDependencies) e garanta a instalação da dependência nativa
+# Instale as dependências. Em seguida, instale a dependência nativa do rollup de forma explícita.
 RUN npm install
-RUN npm install @rollup/rollup-linux-x64-gnu
+RUN npm install @rollup/rollup-linux-x64-gnu --save-dev
 RUN npm rebuild
 
 # Copie o restante do código do frontend
@@ -20,6 +20,9 @@ RUN npm run build
 
 # Use uma imagem leve do Nginx para servir os arquivos estáticos
 FROM nginx:alpine AS serve
+
+# Copie o arquivo de configuração do Nginx para o local correto
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copie a pasta 'dist' gerada pelo build para o diretório padrão do Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
