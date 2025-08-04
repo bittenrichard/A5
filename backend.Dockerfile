@@ -8,7 +8,7 @@ WORKDIR /app
 # Copie o package.json e o package-lock.json para o diretório de trabalho
 COPY package*.json ./
 
-# Instale todas as dependências para que o `tsc` esteja disponível para o build
+# Instale todas as dependências para que o `tsc` e o `multer` estejam disponíveis para o build
 RUN npm install
 
 # Copie o restante do código do backend para o container
