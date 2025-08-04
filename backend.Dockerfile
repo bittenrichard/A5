@@ -8,22 +8,15 @@ WORKDIR /app
 # Copie o package.json e o package-lock.json para o diretório de trabalho
 COPY package*.json ./
 
-# Instale todas as dependências (dev e prod) para que o `tsc` esteja disponível
-RUN npm install
+# Instale as dependências de produção
+RUN npm install --omit=dev
 
-# Copie o restante do código do backend
+# Copie o restante do código do backend para o container
 COPY . .
-
-# Execute o build do projeto para compilar o TypeScript para JavaScript
-# Esta etapa agora vai funcionar porque o `tsc` está instalado
-RUN npm run build:server
-
-# Remova as dependências de desenvolvimento para manter a imagem leve
-RUN npm prune --production
 
 # Exponha a porta em que a aplicação Express está rodando
 EXPOSE 3001
 
-# Comando para iniciar a aplicação
-# -r dotenv/config carrega as variáveis de ambiente
-CMD ["cross-env", "NODE_ENV=production", "node", "-r", "dotenv/config", "./dist-server/server.js"]
+# Comando para iniciar a aplicação através do npm, que resolve o "cross-env"
+# É necessário que no seu package.json tenha um script chamado "start"
+CMD ["npm", "run", "start:prod"]
